@@ -1,5 +1,3 @@
-// This file contains all the Data Structures for our system
-
 class Node {
     Book data;
     Node next;
@@ -24,7 +22,57 @@ class LinkedList {
 
     Book getAt(int index) {
         Node temp = head;
-        for (int i = 0; i < index; i++) temp = temp.next;
+        if (temp == null) return null;
+        for (int i = 0; i < index; i++) {
+            if (temp.next == null) return null;
+            temp = temp.next;
+        }
+        return temp.data;
+    }
+
+    void swap(int i, int j) {
+        if (i < 0 || i >= size || j < 0 || j >= size) return;
+        Node nodeI = head;
+        for (int a = 0; a < i; a++) nodeI = nodeI.next;
+        
+        Node nodeJ = head;
+        for (int a = 0; a < j; a++) nodeJ = nodeJ.next;
+        
+        Book temp = nodeI.data;
+        nodeI.data = nodeJ.data;
+        nodeJ.data = temp;
+    }
+}
+
+class OrderItemNode {
+    OrderItem data;
+    OrderItemNode next;
+    OrderItemNode(OrderItem item) { this.data = item; }
+}
+
+class OrderItemList {
+    OrderItemNode head;
+    int size = 0;
+
+    void addLast(OrderItem item) {
+        OrderItemNode newNode = new OrderItemNode(item);
+        if (head == null) {
+            head = newNode;
+        } else {
+            OrderItemNode temp = head;
+            while (temp.next != null) temp = temp.next;
+            temp.next = newNode;
+        }
+        size++;
+    }
+
+    OrderItem getAt(int index) {
+        OrderItemNode temp = head;
+        if (temp == null) return null;
+        for (int i = 0; i < index; i++) {
+            if (temp.next == null) return null;
+            temp = temp.next;
+        }
         return temp.data;
     }
 }
@@ -34,25 +82,33 @@ class Queue {
     int front = 0, rear = 0, count = 0;
 
     void enqueue(Order o) {
-        items[rear++] = o;
-        count++;
+        if (rear < items.length) {
+            items[rear++] = o;
+            count++;
+        }
     }
 
     Order dequeue() {
+        if (count == 0) return null;
         count--;
         return items[front++];
     }
+
+    boolean isEmpty() { return count == 0; }
 }
 
 class Stack {
-    String[] history = new String[100];
+    String[] items = new String[100];
     int top = -1;
 
-    void push(String act) {
-        history[++top] = act;
+    void push(String action) {
+        if (top < 99) items[++top] = action;
     }
 
     String pop() {
-        return history[top--];
+        if (top == -1) return "No history";
+        return items[top--];
     }
+
+    boolean isEmpty() { return top == -1; }
 }
